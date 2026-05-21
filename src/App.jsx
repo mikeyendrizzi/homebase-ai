@@ -72,12 +72,10 @@ export default function HomeBaseAI() {
     setMessages(newMessages);
     setLoading(true);
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
           system: SYSTEM_PROMPT,
           messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
         }),
@@ -245,14 +243,11 @@ export default function HomeBaseAI() {
         }
       `}</style>
 
-      {/* Warm background blobs */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
         <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, #ede0cf 0%, transparent 65%)", top: -150, right: -150, opacity: 0.55 }} />
         <div style={{ position: "absolute", width: 450, height: 450, borderRadius: "50%", background: "radial-gradient(circle, #e4d8c8 0%, transparent 65%)", bottom: -100, left: -100, opacity: 0.45 }} />
-        <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, #f0e8dc 0%, transparent 65%)", top: "40%", left: "30%", opacity: 0.3 }} />
       </div>
 
-      {/* Nav */}
       <div style={{ width: "100%", maxWidth: 720, padding: "24px 28px 0", zIndex: 2, position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 36, height: 36, borderRadius: 10, background: "#2c2420", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🏡</div>
@@ -264,12 +259,8 @@ export default function HomeBaseAI() {
         </div>
       </div>
 
-      {/* Hero Section */}
       {!started && (
-        <div
-          className={`hero-fade ${heroVisible ? "visible" : ""}`}
-          style={{ opacity: 0, transform: "translateY(20px)", width: "100%", maxWidth: 720, padding: "60px 28px 40px", zIndex: 1, position: "relative", textAlign: "center" }}
-        >
+        <div className={`hero-fade ${heroVisible ? "visible" : ""}`} style={{ opacity: 0, transform: "translateY(20px)", width: "100%", maxWidth: 720, padding: "60px 28px 40px", zIndex: 1, position: "relative", textAlign: "center" }}>
           <div style={{ display: "inline-block", background: "#fff", border: "1px solid #ece5dc", borderRadius: 20, padding: "6px 16px", fontSize: 12, color: "#c4a882", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 24, boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
             Free · No signup required
           </div>
@@ -279,20 +270,14 @@ export default function HomeBaseAI() {
           <p style={{ fontSize: 15, color: "#9a8878", fontWeight: 400, lineHeight: 1.7, maxWidth: 420, margin: "0 auto 36px", letterSpacing: "0.01em" }}>
             Ask anything about mortgages, loans, and the homebuying process — in plain English, anytime.
           </p>
-
           <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 40 }}>
             {["⚡ Instant answers", "🔒 Education only", "🏡 First-time friendly"].map((tag, i) => (
               <div key={i} className="pill">{tag}</div>
             ))}
           </div>
-
           <button className="start-btn" onClick={startChat}>Start asking questions →</button>
-
-          {/* Preview questions */}
           <div style={{ marginTop: 48 }}>
-            <div style={{ fontSize: 10.5, color: "#c4b8a8", marginBottom: 14, fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-              Popular questions
-            </div>
+            <div style={{ fontSize: 10.5, color: "#c4b8a8", marginBottom: 14, fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase" }}>Popular questions</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, maxWidth: 560, margin: "0 auto" }}>
               {SUGGESTED_QUESTIONS.map((q, i) => (
                 <button key={i} className="suggestion-btn" onClick={() => { startChat(); setTimeout(() => sendMessage(q.text), 400); }}>
@@ -305,27 +290,15 @@ export default function HomeBaseAI() {
         </div>
       )}
 
-      {/* Chat Section */}
       {started && (
-        <div
-          className={`chat-fade ${chatVisible ? "visible" : ""}`}
-          style={{ opacity: 0, width: "100%", maxWidth: 720, display: "flex", flexDirection: "column", flex: 1 }}
-        >
-          {/* Disclaimer */}
+        <div className={`chat-fade ${chatVisible ? "visible" : ""}`} style={{ opacity: 0, width: "100%", maxWidth: 720, display: "flex", flexDirection: "column", flex: 1 }}>
           <div style={{ padding: "14px 28px 0", zIndex: 1, position: "relative" }}>
             <div style={{ fontSize: 11, color: "#c4b8a8", lineHeight: 1.6 }}>
               📋 For educational purposes only — not financial advice. Always consult a licensed loan officer for personalized guidance.
             </div>
           </div>
 
-          {/* Messages */}
-          <div style={{
-            flex: 1, padding: "20px 28px",
-            display: "flex", flexDirection: "column", gap: 16,
-            overflowY: "auto", minHeight: 0,
-            maxHeight: "calc(100vh - 240px)",
-            zIndex: 1, position: "relative",
-          }}>
+          <div style={{ flex: 1, padding: "20px 28px", display: "flex", flexDirection: "column", gap: 16, overflowY: "auto", minHeight: 0, maxHeight: "calc(100vh - 240px)", zIndex: 1, position: "relative" }}>
             {messages.map((msg, i) => (
               <div key={i} className="msg-in" style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 10, alignItems: "flex-start" }}>
                 {msg.role === "assistant" && (
@@ -370,29 +343,15 @@ export default function HomeBaseAI() {
                 </div>
               </div>
             )}
-
             <div ref={bottomRef} />
           </div>
 
-          {/* Talk to loan officer CTA */}
           <div style={{ padding: "0 28px 12px", zIndex: 1, position: "relative", display: "flex", justifyContent: "center" }}>
-            <button className="cta-btn">
-              <span>📞</span>
-              <span>Talk to a licensed loan officer</span>
-            </button>
+            <button className="cta-btn"><span>📞</span><span>Talk to a licensed loan officer</span></button>
           </div>
 
-          {/* Input */}
           <div style={{ padding: "0 28px 28px", zIndex: 1, position: "relative" }}>
-            <div className="input-wrap" style={{
-              background: "#fff",
-              border: "1.5px solid #ece5dc",
-              borderRadius: 14,
-              padding: "12px 12px 12px 18px",
-              display: "flex", alignItems: "flex-end", gap: 10,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-              transition: "border-color 0.2s, box-shadow 0.2s",
-            }}>
+            <div className="input-wrap" style={{ background: "#fff", border: "1.5px solid #ece5dc", borderRadius: 14, padding: "12px 12px 12px 18px", display: "flex", alignItems: "flex-end", gap: 10, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", transition: "border-color 0.2s, box-shadow 0.2s" }}>
               <textarea
                 ref={inputRef}
                 rows={1}

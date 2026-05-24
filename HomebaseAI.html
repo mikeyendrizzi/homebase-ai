@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomeBase AI — AI Assistant for Mortgage Brokers & Real Estate Agents</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      background: #fff;
+      color: #1d1d1f;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 56px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.3px; text-decoration: none; }
+    .nav-logo-icon { width: 26px; height: 26px; background: #1d1d1f; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 13px; color: #6e6e73; text-decoration: none; letter-spacing: -0.1px; transition: color 0.15s; }
+    .nav-links a:hover { color: #1d1d1f; }
+    .nav-cta { background: #1d1d1f; color: #fff !important; border-radius: 980px; padding: 7px 18px !important; font-size: 13px !important; font-weight: 500 !important; }
+    .nav-cta:hover { background: #3a3a3c !important; }
+
+    .hero { padding: 160px 48px 100px; max-width: 1080px; margin: 0 auto; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 6px; background: #f5f5f7; border-radius: 980px; padding: 5px 14px; font-size: 12px; color: #6e6e73; margin-bottom: 24px; }
+    .hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: #34c759; }
+    h1 { font-size: 72px; font-weight: 700; line-height: 1.04; letter-spacing: -2.5px; color: #1d1d1f; margin-bottom: 20px; max-width: 800px; }
+    h1 span { color: #6e6e73; font-weight: 400; }
+    .hero-sub { font-size: 19px; color: #6e6e73; line-height: 1.55; max-width: 520px; margin-bottom: 40px; letter-spacing: -0.3px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-primary { background: #1d1d1f; color: #fff; border: none; border-radius: 980px; padding: 14px 28px; font-size: 15px; font-family: inherit; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; letter-spacing: -0.2px; transition: all 0.15s; }
+    .btn-primary:hover { background: #3a3a3c; transform: scale(1.02); }
+    .btn-ghost { background: transparent; color: #1d1d1f; border: 1px solid rgba(0,0,0,0.15); border-radius: 980px; padding: 13px 26px; font-size: 15px; font-family: inherit; font-weight: 400; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; letter-spacing: -0.2px; transition: background 0.15s; }
+    .btn-ghost:hover { background: #f5f5f7; }
+
+    .hero-industries { display: flex; gap: 16px; flex-wrap: wrap; }
+    .industry-pill { display: flex; align-items: center; gap: 8px; background: #f5f5f7; border-radius: 12px; padding: 10px 16px; font-size: 14px; color: #1d1d1f; font-weight: 500; letter-spacing: -0.1px; }
+    .industry-pill span { font-size: 18px; }
+
+    .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #aeaeb2; margin-bottom: 16px; }
+
+    /* INDUSTRY SECTIONS */
+    .industry-section { padding: 100px 48px; }
+    .industry-section.grey { background: #f5f5f7; }
+    .industry-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .industry-inner.reverse { direction: rtl; }
+    .industry-inner.reverse > * { direction: ltr; }
+    .industry-text h2 { font-size: 44px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+    .industry-text h2 span { color: #6e6e73; font-weight: 400; }
+    .industry-text p { font-size: 16px; color: #6e6e73; line-height: 1.65; letter-spacing: -0.2px; margin-bottom: 28px; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .feature-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #3a3a3c; line-height: 1.5; letter-spacing: -0.1px; }
+    .feature-check { color: #34c759; font-size: 13px; flex-shrink: 0; margin-top: 1px; font-weight: 600; }
+
+    .industry-card { background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+    .industry-card.dark { background: #1d1d1f; }
+    .card-header { padding: 20px 20px 16px; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px; }
+    .industry-card.dark .card-header { border-color: rgba(255,255,255,0.08); }
+    .card-icon { width: 32px; height: 32px; border-radius: 9px; background: #1d1d1f; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .industry-card.dark .card-icon { background: rgba(255,255,255,0.1); }
+    .card-title { font-size: 14px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.2px; }
+    .industry-card.dark .card-title { color: #fff; }
+    .card-subtitle { font-size: 11px; color: #aeaeb2; letter-spacing: -0.1px; }
+    .card-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
+    .chat-row { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-row.user { flex-direction: row-reverse; }
+    .chat-avatar { width: 22px; height: 22px; border-radius: 6px; background: #1d1d1f; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+    .industry-card.dark .chat-avatar { background: rgba(255,255,255,0.15); }
+    .chat-bubble { max-width: 78%; padding: 9px 12px; border-radius: 14px; font-size: 12.5px; line-height: 1.5; letter-spacing: -0.1px; }
+    .chat-bubble.ai { background: #f5f5f7; color: #1d1d1f; border-radius: 14px 14px 14px 3px; }
+    .industry-card.dark .chat-bubble.ai { background: rgba(255,255,255,0.1); color: #fff; }
+    .chat-bubble.user-b { background: #1d1d1f; color: #fff; border-radius: 14px 14px 3px 14px; }
+    .industry-card.dark .chat-bubble.user-b { background: #0071e3; }
+    .card-footer { border-top: 1px solid rgba(0,0,0,0.06); padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
+    .industry-card.dark .card-footer { border-color: rgba(255,255,255,0.08); }
+    .card-input { flex: 1; background: #f5f5f7; border-radius: 8px; padding: 7px 10px; font-size: 11.5px; color: #aeaeb2; }
+    .industry-card.dark .card-input { background: rgba(255,255,255,0.08); }
+    .card-send { width: 24px; height: 24px; background: #1d1d1f; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .industry-card.dark .card-send { background: #0071e3; }
+
+    /* HOW IT WORKS */
+    .how-section { padding: 100px 48px; max-width: 1080px; margin: 0 auto; }
+    .how-section h2 { font-size: 48px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 60px; max-width: 500px; }
+    .how-section h2 span { color: #6e6e73; font-weight: 400; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .step-num { font-size: 13px; font-weight: 600; color: #aeaeb2; margin-bottom: 16px; }
+    .step-icon { width: 44px; height: 44px; background: #f5f5f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
+    .step h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 8px; }
+    .step p { font-size: 14px; color: #6e6e73; line-height: 1.6; letter-spacing: -0.1px; }
+
+    .setup-banner { background: #1d1d1f; border-radius: 20px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 40px; max-width: 1080px; margin: 0 auto 100px; }
+    .setup-banner h3 { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.8px; margin-bottom: 8px; }
+    .setup-banner p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.5; letter-spacing: -0.1px; max-width: 480px; }
+    .setup-banner p strong { color: rgba(255,255,255,0.9); }
+    .setup-banner-btn { background: #fff; color: #1d1d1f; border: none; border-radius: 980px; padding: 13px 26px; font-size: 14px; font-family: inherit; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; transition: all 0.15s; display: inline-block; }
+    .setup-banner-btn:hover { background: #f5f5f7; }
+
+    /* PRICING */
+    .pricing-section { background: #f5f5f7; padding: 100px 48px; }
+    .pricing-inner { max-width: 1080px; margin: 0 auto; }
+    .pricing-inner h2 { font-size: 48px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 8px; }
+    .pricing-inner > p { font-size: 17px; color: #6e6e73; margin-bottom: 56px; letter-spacing: -0.2px; }
+    .pricing-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pricing-card { border-radius: 20px; padding: 32px 28px; position: relative; }
+    .pricing-card.starter { background: #fff; border: 1px solid rgba(0,0,0,0.08); }
+    .pricing-card.growth { background: #e8e8ed; border: none; }
+    .pricing-card.enterprise { background: #1d1d1f; color: #fff; border: none; }
+    .pricing-badge { position: absolute; top: 20px; right: 20px; background: #0071e3; color: #fff; border-radius: 980px; padding: 3px 10px; font-size: 11px; font-weight: 500; }
+    .pricing-tier { font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 12px; }
+    .starter .pricing-tier { color: #aeaeb2; }
+    .growth .pricing-tier { color: #6e6e73; }
+    .enterprise .pricing-tier { color: rgba(255,255,255,0.45); }
+    .pricing-price { font-size: 44px; font-weight: 700; letter-spacing: -2px; margin-bottom: 4px; }
+    .pricing-period { font-size: 13px; margin-bottom: 24px; letter-spacing: -0.1px; }
+    .starter .pricing-period, .growth .pricing-period { color: #6e6e73; }
+    .enterprise .pricing-period { color: rgba(255,255,255,0.45); }
+    .pricing-divider { height: 1px; margin-bottom: 24px; }
+    .starter .pricing-divider { background: rgba(0,0,0,0.08); }
+    .growth .pricing-divider { background: rgba(0,0,0,0.1); }
+    .enterprise .pricing-divider { background: rgba(255,255,255,0.12); }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-features li { font-size: 14px; letter-spacing: -0.1px; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+    .starter .pricing-features li, .growth .pricing-features li { color: #3a3a3c; }
+    .enterprise .pricing-features li { color: rgba(255,255,255,0.8); }
+    .check { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .starter .check, .growth .check { color: #34c759; }
+    .enterprise .check { color: #30d158; }
+    .pricing-btn { width: 100%; border-radius: 12px; padding: 13px; font-size: 14px; font-family: inherit; font-weight: 500; cursor: pointer; letter-spacing: -0.1px; transition: all 0.15s; text-align: center; display: block; text-decoration: none; border: none; }
+    .btn-dark { background: #1d1d1f; color: #fff; }
+    .btn-dark:hover { background: #3a3a3c; }
+    .btn-mid { background: #1d1d1f; color: #fff; }
+    .btn-mid:hover { background: #3a3a3c; }
+    .btn-light { background: #fff; color: #1d1d1f; }
+    .btn-light:hover { background: #f5f5f7; }
+    .setup-note { margin-top: 24px; text-align: center; font-size: 13px; color: #6e6e73; letter-spacing: -0.1px; }
+    .setup-note strong { color: #1d1d1f; }
+
+    /* FAQ */
+    .faq-section { padding: 100px 48px; max-width: 1080px; margin: 0 auto; }
+    .faq-section h2 { font-size: 48px; font-weight: 700; letter-spacing: -1.5px; margin-bottom: 48px; }
+    .faq-item { border-top: 1px solid rgba(0,0,0,0.08); padding: 20px 0; cursor: pointer; }
+    .faq-item:last-child { border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; letter-spacing: -0.3px; }
+    .faq-icon { font-size: 18px; color: #aeaeb2; transition: transform 0.2s; }
+    .faq-a { font-size: 14px; color: #6e6e73; line-height: 1.6; letter-spacing: -0.1px; margin-top: 12px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    .cta-section { background: #1d1d1f; padding: 100px 48px; text-align: center; }
+    .cta-section h2 { font-size: 52px; font-weight: 700; color: #fff; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
+    .cta-section p { font-size: 17px; color: rgba(255,255,255,0.6); margin-bottom: 36px; letter-spacing: -0.2px; }
+
+    footer { padding: 40px 48px; border-top: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; max-width: 1080px; margin: 0 auto; }
+    .footer-logo { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: #1d1d1f; }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a { font-size: 12px; color: #6e6e73; text-decoration: none; }
+    .footer-links a:hover { color: #1d1d1f; }
+    .footer-copy { font-size: 12px; color: #aeaeb2; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      h1 { font-size: 40px; letter-spacing: -1.5px; }
+      .hero { padding: 120px 24px 60px; }
+      .industry-section { padding: 60px 24px; }
+      .industry-inner { grid-template-columns: 1fr; gap: 40px; }
+      .industry-inner.reverse { direction: ltr; }
+      .how-section { padding: 60px 24px; }
+      .how-section h2 { font-size: 36px; }
+      .steps { grid-template-columns: 1fr; gap: 32px; }
+      .setup-banner { margin: 0 24px 60px; padding: 32px 24px; flex-direction: column; }
+      .pricing-section { padding: 60px 24px; }
+      .pricing-inner h2 { font-size: 36px; }
+      .pricing-cards { grid-template-columns: 1fr; }
+      .faq-section { padding: 60px 24px; }
+      .faq-section h2 { font-size: 36px; }
+      .cta-section { padding: 60px 24px; }
+      .cta-section h2 { font-size: 36px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 16px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">🏡</div>
+      HomeBase AI
+    </a>
+    <ul class="nav-links">
+      <li><a href="#mortgage">Mortgage Brokers</a></li>
+      <li><a href="#realestate">Real Estate Agents</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://homebase-ai-three.vercel.app" target="_blank">Try it free</a></li>
+      <li><a href="#pricing" class="nav-cta">Book a demo</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      Built for mortgage brokers & real estate agents
+    </div>
+    <h1>Your AI assistant.<br /><span>Always on.</span></h1>
+    <p class="hero-sub">HomeBase AI answers your clients' questions 24/7, captures leads while you sleep, and makes your business look world-class.</p>
+    <div class="hero-btns">
+      <a href="https://homebase-ai-three.vercel.app" target="_blank" class="btn-primary">Try it free →</a>
+      <a href="#pricing" class="btn-ghost">Book a demo</a>
+    </div>
+    <div class="hero-industries">
+      <div class="industry-pill"><span>🏦</span> Mortgage Brokers</div>
+      <div class="industry-pill"><span>🏡</span> Real Estate Agents</div>
+      <div class="industry-pill"><span>🏢</span> Brokerages & Teams</div>
+    </div>
+  </section>
+
+  <!-- MORTGAGE BROKERS -->
+  <section class="industry-section grey" id="mortgage">
+    <div class="industry-inner">
+      <div class="industry-text">
+        <div class="section-label">For Mortgage Brokers</div>
+        <h2>Close more deals.<br /><span>Answer less questions.</span></h2>
+        <p>Your leads arrive confused about rates, DTI, and loan types. HomeBase AI educates them instantly — so by the time they call you, they're ready to move forward.</p>
+        <ul class="feature-list">
+          <li><span class="feature-check">✓</span> Answers hundreds of mortgage questions instantly — rates, loan types, DTI, closing costs, and more</li>
+          <li><span class="feature-check">✓</span> Trained on your specific loan products and offerings</li>
+          <li><span class="feature-check">✓</span> Captures warm leads and routes them to your loan officers</li>
+          <li><span class="feature-check">✓</span> Available 24/7 — even when your team isn't</li>
+          <li><span class="feature-check">✓</span> Branded with your logo and colors</li>
+        </ul>
+        <a href="https://homebase-ai-three.vercel.app" target="_blank" class="btn-primary">See it in action →</a>
+      </div>
+      <div class="industry-card">
+        <div class="card-header">
+          <div class="card-icon">🏦</div>
+          <div>
+            <div class="card-title">HomeBase AI — Mortgage</div>
+            <div class="card-subtitle">Powered by AI · Always online</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chat-row">
+            <div class="chat-avatar">🏦</div>
+            <div class="chat-bubble ai">Hi! I can answer any questions you have about mortgages or the home buying process.</div>
+          </div>
+          <div class="chat-row user">
+            <div class="chat-bubble user-b">What credit score do I need?</div>
+          </div>
+          <div class="chat-row">
+            <div class="chat-avatar">🏦</div>
+            <div class="chat-bubble ai">Conventional loans typically require 620+. FHA loans can go as low as 580. The higher your score, the better your interest rate will be.</div>
+          </div>
+          <div class="chat-row user">
+            <div class="chat-bubble user-b">How much do I need for a down payment?</div>
+          </div>
+          <div class="chat-row">
+            <div class="chat-avatar">🏦</div>
+            <div class="chat-bubble ai">As little as 3% on conventional loans, 3.5% on FHA. VA and USDA loans can be 0% down if you qualify.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-input">Ask anything about mortgages...</div>
+          <div class="card-send">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REAL ESTATE AGENTS -->
+  <section class="industry-section" id="realestate">
+    <div class="industry-inner reverse">
+      <div class="industry-text">
+        <div class="section-label">For Real Estate Agents</div>
+        <h2>Your listings.<br /><span>Always answering.</span></h2>
+        <p>Buyers browse your listings at midnight with questions you can't answer in real time. HomeBase AI handles it all — from neighborhood info to offer process — and captures their contact info so you wake up to warm leads.</p>
+        <ul class="feature-list">
+          <li><span class="feature-check">✓</span> Answers buyer questions about the buying process, neighborhoods, and market conditions</li>
+          <li><span class="feature-check">✓</span> Trained on your active listings and local market</li>
+          <li><span class="feature-check">✓</span> Captures buyer leads 24/7 — even while you're with other clients</li>
+          <li><span class="feature-check">✓</span> Send it to clients as a personal resource during the buying journey</li>
+          <li><span class="feature-check">✓</span> Branded with your name, photo, and contact info</li>
+        </ul>
+        <a href="https://homebase-ai-three.vercel.app" target="_blank" class="btn-primary">See it in action →</a>
+      </div>
+      <div class="industry-card dark">
+        <div class="card-header">
+          <div class="card-icon">🏡</div>
+          <div>
+            <div class="card-title">HomeBase AI — Real Estate</div>
+            <div class="card-subtitle">Powered by AI · Always online</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chat-row">
+            <div class="chat-avatar">🏡</div>
+            <div class="chat-bubble ai">Hi! I can answer questions about buying a home, the process, or any of our current listings.</div>
+          </div>
+          <div class="chat-row user">
+            <div class="chat-bubble user-b">How does the offer process work?</div>
+          </div>
+          <div class="chat-row">
+            <div class="chat-avatar">🏡</div>
+            <div class="chat-bubble ai">Once you find a home you love, your agent submits a written offer with your price and terms. The seller can accept, reject, or counter. If accepted, you move into escrow.</div>
+          </div>
+          <div class="chat-row user">
+            <div class="chat-bubble user-b">What's earnest money?</div>
+          </div>
+          <div class="chat-row">
+            <div class="chat-avatar">🏡</div>
+            <div class="chat-bubble ai">Earnest money is a deposit (usually 1-3% of the purchase price) that shows the seller you're serious. It goes toward your down payment at closing.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-input">Ask about listings or the process...</div>
+          <div class="card-send">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="section-label">How it works</div>
+    <h2>Live in 24 hours.<br /><span>No developer needed.</span></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">⚡</div>
+        <h3>We set it up for you</h3>
+        <p>We handle the entire setup and customize it to your brand, loan products, or listings. Or we provide the code if you prefer to do it yourself.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>AI answers 24/7</h3>
+        <p>HomeBase AI answers hundreds of questions instantly — mortgage, real estate, listings, process. Day or night, no wait time.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">📋</div>
+        <h3>You get warm leads</h3>
+        <p>Interested visitors fill out the lead form and get routed to you or your team — educated, warm, and ready to talk.</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="padding: 0 48px; margin-bottom: 100px;">
+    <div class="setup-banner">
+      <div>
+        <h3>We'll handle everything.</h3>
+        <p>No developer? No problem. For a one-time fee of <strong>$299</strong>, we set up HomeBase AI on your website, configure your branding, and make sure everything works perfectly.</p>
+      </div>
+      <a href="mailto:hello@homebaseai.com" class="setup-banner-btn">Get set up →</a>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-inner">
+      <div class="section-label">Pricing</div>
+      <h2>Simple, transparent pricing.</h2>
+      <p>For mortgage brokers and real estate agents. Cancel anytime.</p>
+      <div class="pricing-cards">
+        <div class="pricing-card starter">
+          <div class="pricing-tier">Starter</div>
+          <div class="pricing-price">$199</div>
+          <div class="pricing-period">per month</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> HomeBase AI on your website</li>
+            <li><span class="check">✓</span> Your logo and brand colors</li>
+            <li><span class="check">✓</span> Lead capture form</li>
+            <li><span class="check">✓</span> 1 contact (loan officer or agent)</li>
+            <li><span class="check">✓</span> Standard AI responses</li>
+            <li><span class="check">✓</span> Email support</li>
+            <li><span class="check">✓</span> DIY setup — code provided</li>
+          </ul>
+          <a href="mailto:hello@homebaseai.com" class="pricing-btn btn-dark">Get started</a>
+        </div>
+        <div class="pricing-card growth">
+          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-tier">Growth</div>
+          <div class="pricing-price">$399</div>
+          <div class="pricing-period">per month</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Everything in Starter</li>
+            <li><span class="check">✓</span> Up to 5 contacts with routing</li>
+            <li><span class="check">✓</span> AI trained on your products or listings</li>
+            <li><span class="check">✓</span> Weekly lead report via email</li>
+            <li><span class="check">✓</span> Live chat support</li>
+            <li><span class="check">✓</span> Priority response time</li>
+            <li><span class="check">✓</span> We handle setup for you</li>
+          </ul>
+          <a href="mailto:hello@homebaseai.com" class="pricing-btn btn-mid">Get started</a>
+        </div>
+        <div class="pricing-card enterprise">
+          <div class="pricing-tier">Enterprise</div>
+          <div class="pricing-price">Custom</div>
+          <div class="pricing-period">contact us</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Everything in Growth</li>
+            <li><span class="check">✓</span> Unlimited contacts</li>
+            <li><span class="check">✓</span> CRM integration</li>
+            <li><span class="check">✓</span> Dedicated account manager</li>
+            <li><span class="check">✓</span> Monthly strategy call</li>
+            <li><span class="check">✓</span> SLA guarantee</li>
+            <li><span class="check">✓</span> Full white-glove setup</li>
+          </ul>
+          <a href="mailto:hello@homebaseai.com" class="pricing-btn btn-light">Contact us</a>
+        </div>
+      </div>
+      <p class="setup-note">Want us to handle setup? Add our <strong>Done For You setup for $299</strong> — one time, any plan.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-label">FAQ</div>
+    <h2>Common questions.</h2>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is this for mortgage brokers or real estate agents? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Both. HomeBase AI is fully customizable for mortgage brokers, real estate agents, brokerages, and teams. We configure it based on your specific business and what your clients need to know.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do I need a developer to set this up? <span class="faq-icon">+</span></div>
+      <div class="faq-a">No. We offer a Done For You setup for a one-time fee of $299 — we handle everything. If you have a developer, we provide a simple code snippet they can add in minutes.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can it be trained on my specific listings or loan products? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. Growth and Enterprise plans include custom AI training — we feed it your specific listings, loan products, service areas, and any other info that makes it more useful for your clients.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is HomeBase AI financial or legal advice? <span class="faq-icon">+</span></div>
+      <div class="faq-a">No. HomeBase AI is strictly an education tool. It explains concepts clearly but always directs users to speak with a licensed professional for personalized advice.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I customize the branding? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. Every plan includes custom branding — your logo, colors, and contact information. It looks like your product, not ours.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What happens to the leads it captures? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Lead info is sent directly to you via email. Growth and Enterprise plans include routing to multiple team members. You own your leads completely.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I cancel anytime? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. No contracts, no cancellation fees. Cancel anytime.</div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to get started?</h2>
+    <p>Join mortgage brokers and real estate agents using HomeBase AI to capture more leads and close more deals.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://homebase-ai-three.vercel.app" target="_blank" class="btn-primary" style="background:#fff;color:#1d1d1f;">Try it free →</a>
+      <a href="mailto:hello@homebaseai.com" class="btn-ghost" style="color:#fff;border-color:rgba(255,255,255,0.3);">Contact us</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">
+      <div class="nav-logo-icon">🏡</div>
+      HomeBase AI
+    </div>
+    <ul class="footer-links">
+      <li><a href="#mortgage">Mortgage Brokers</a></li>
+      <li><a href="#realestate">Real Estate Agents</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="mailto:hello@homebaseai.com">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 HomeBase AI</div>
+  </footer>
+
+  <script>
+    function toggleFaq(el) { el.classList.toggle('open'); }
+  </script>
+</body>
+</html>

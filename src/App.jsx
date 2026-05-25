@@ -268,7 +268,7 @@ export default function HomeBaseAI() {
       {/* Nav */}
       <div style={{ width: "100%", maxWidth: 680, padding: "20px 24px 0", position: "relative", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 28, height: 28, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🏡</div>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}><img src="/logo.svg" style={{width:"100%",height:"100%",objectFit:"contain"}} alt="HomeBase AI"/></div>
           <span style={{ fontSize: 16, fontWeight: 600, color: "#1d1d1f", letterSpacing: "-0.3px" }}>HomeBase AI</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -321,7 +321,7 @@ export default function HomeBaseAI() {
             {messages.map((msg, i) => (
               <div key={i} className="msg-in" style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", gap: 8, alignItems: "flex-end" }}>
                 {msg.role === "assistant" && (
-                  <div style={{ width: 26, height: 26, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>🏡</div>
+                  <div style={{ width: 26, height: 26, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}><img src="/logo.svg" style={{width:"100%",height:"100%",objectFit:"contain"}} alt="HomeBase AI"/></div>
                 )}
                 <div style={{
                   maxWidth: "78%",
@@ -341,7 +341,7 @@ export default function HomeBaseAI() {
 
             {loading && (
               <div className="msg-in" style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
-                <div style={{ width: 26, height: 26, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>🏡</div>
+                <div style={{ width: 26, height: 26, borderRadius: 8, background: "#1d1d1f", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}><img src="/logo.svg" style={{width:"100%",height:"100%",objectFit:"contain"}} alt="HomeBase AI"/></div>
                 <div style={{ background: "#f5f5f7", borderRadius: "18px 18px 18px 4px", padding: "13px 15px" }}>
                   <div className="dot-pulse"><span /><span /><span /></div>
                 </div>

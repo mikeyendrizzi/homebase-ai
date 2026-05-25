@@ -1,0 +1,15 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- White background with rounded corners -->
+  <rect width="1000" height="1000" rx="200" fill="#f5f5f5"/>
+
+  <!-- Minimal house outline - centered, black -->
+  <polyline points="500,230 680,390 680,590 320,590 320,390 500,230" fill="none" stroke="#1a1a1a" stroke-width="28" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- HomeBase text -->
+  <text x="500" y="690" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="90" fill="#1a1a1a" letter-spacing="-2">HomeBase</text>
+
+  <!-- AI text -->
+  <text x="500" y="770" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="200" font-size="64" fill="#888888" letter-spacing="18">AI</text>
+
+</svg>
